@@ -1,6 +1,9 @@
 package capers;
 
 import java.io.File;
+import java.io.Serializable;
+
+import static capers.Dog.DOG_FOLDER;
 import static capers.Utils.*;
 
 /** A repository for Capers 
@@ -13,12 +16,12 @@ import static capers.Utils.*;
  *
  * TODO: change the above structure if you do something different.
  */
-public class CapersRepository {
+public class CapersRepository implements Serializable {
     /** Current Working Directory. */
     static final File CWD = new File(System.getProperty("user.dir"));
 
     /** Main metadata folder. */
-    static final File CAPERS_FOLDER = null; // TODO Hint: look at the `join`
+    static final File CAPERS_FOLDER = Utils.join("CWD",".capers"); // TODO Hint: look at the `join`
                                             //      function in Utils
 
     /**
@@ -32,6 +35,9 @@ public class CapersRepository {
      */
     public static void setupPersistence() {
         // TODO
+        if(!CAPERS_FOLDER.exists()){
+            CAPERS_FOLDER.mkdir();
+        }
     }
 
     /**
@@ -40,7 +46,15 @@ public class CapersRepository {
      * @param text String of the text to be appended to the story
      */
     public static void writeStory(String text) {
-        // TODO
+        // TODO;
+        File Story = Utils.join(CAPERS_FOLDER ,"story");
+        String instant = "";
+        if(Story.exists()){
+             instant = Utils.readContentsAsString(Story);
+        }
+        text = instant + "\n" + text;
+        Utils.writeContents(Story,text);
+        System.out.print(text);
     }
 
     /**
@@ -50,15 +64,19 @@ public class CapersRepository {
      */
     public static void makeDog(String name, String breed, int age) {
         // TODO
+        Dog lld1 =new Dog(name, breed, age);
+        lld1.saveDog();
+        System.out.println(lld1);
     }
 
     /**
-     * Advances a dog's age persistently and prints out a celebratory message.
-     * Also prints out the dog's information using toString().
-     * Chooses dog to advance based on the first non-command argument of args.
-     * @param name String name of the Dog whose birthday we're celebrating.
+     * çrating.
      */
     public static void celebrateBirthday(String name) {
         // TODO
+        Dog lld1 = Dog.fromFile(name);
+        lld1.haveBirthday();
+        lld1.saveDog();
+
     }
 }
