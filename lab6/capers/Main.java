@@ -48,7 +48,7 @@ public class Main {
             /* This call has been handled for you. The rest will be similar. */
             validateNumArgs("story", args, 2);
             text = args[1];
-            CapersRepository.writeStory(text);
+            CapersRepository.writeStory(text);//write Stroy with args[1];
             break;
         case "dog":
             validateNumArgs("dog", args, 4);

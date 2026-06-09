@@ -21,7 +21,7 @@ public class CapersRepository implements Serializable {
     static final File CWD = new File(System.getProperty("user.dir"));
 
     /** Main metadata folder. */
-    static final File CAPERS_FOLDER = Utils.join("CWD",".capers"); // TODO Hint: look at the `join`
+    static final File CAPERS_FOLDER = Utils.join(CWD,".capers"); // TODO Hint: look at the `join`
                                             //      function in Utils
 
     /**
@@ -35,9 +35,8 @@ public class CapersRepository implements Serializable {
      */
     public static void setupPersistence() {
         // TODO
-        if(!CAPERS_FOLDER.exists()){
-            CAPERS_FOLDER.mkdir();
-        }
+        CapersRepository.CAPERS_FOLDER.mkdir();
+        Dog.DOG_FOLDER.mkdir();
     }
 
     /**
@@ -46,15 +45,29 @@ public class CapersRepository implements Serializable {
      * @param text String of the text to be appended to the story
      */
     public static void writeStory(String text) {
+
+            File Story_Fold = Utils.join(CapersRepository.CAPERS_FOLDER, "story");
+
+            // 1. 默认老故事为空（针对第一次运行）
+            String older = "";
+
+            // 2. 如果文件存在，就把里面的内容全读出来替换掉 older
+            if (Story_Fold.exists()) {
+                older = Utils.readContentsAsString(Story_Fold);
+            }
+
+            // 3. 完美拼接：老故事（本身已经自带之前的换行） + 新文本 + 本次的新换行符
+            String last = older + text + "\n";
+
+            // 4. 统一使用纯文本写入工具（覆盖写入硬盘）
+            Utils.writeContents(Story_Fold, last);
+
+            // 5. 大声朗读（因为 last 末尾已经有 \n 了，所以直接用 print）
+            System.out.print(last);
         // TODO;
-        File Story = Utils.join(CAPERS_FOLDER ,"story");
-        String instant = "";
-        if(Story.exists()){
-             instant = Utils.readContentsAsString(Story);
-        }
-        text = instant + "\n" + text;
-        Utils.writeContents(Story,text);
-        System.out.print(text);
+
+
+
     }
 
     /**
